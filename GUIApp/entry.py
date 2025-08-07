@@ -6,7 +6,7 @@ class CreditScoringApp(tk.Tk):
         super().__init__()
         self.root = self
         self.root.title("Alternative Credit Scoring - Data Entry")
-        self.root.geometry("600x700")
+        self.root.geometry("1000x1000")
         self.form_data = {}
         self.create_widgets()
 
@@ -27,26 +27,26 @@ class CreditScoringApp(tk.Tk):
         self.create_label_entry("grade_or_cgpa", 12)
 
         # Submit button
-        submit_btn = tk.Button(self.root, text="Submit", command=self.submit_data)
+        submit_btn = tk.Button(self.root, text="Submit", command=self.submit_data , fg= "black")
         submit_btn.grid(row=13, column=1, pady=20)
 
     def create_label_entry(self, label, row):
-        tk.Label(self.root, text=label).grid(row=row, column=0, sticky='w', padx=10, pady=5)
+        tk.Label(self.root, text=label).grid(row=row, column=5, sticky='w', padx=10, pady=5)
         entry = tk.Entry(self.root)
-        entry.grid(row=row, column=1, pady=5)
+        entry.grid(row=row, column=6, pady=5)
         self.form_data[label] = entry
 
     def create_dropdown(self, label, options, row):
-        tk.Label(self.root, text=label).grid(row=row, column=0, sticky='w', padx=10, pady=5)
+        tk.Label(self.root, text=label).grid(row=row, column=5, sticky='w', padx=10, pady=5)
         var = tk.StringVar()
         dropdown = ttk.Combobox(self.root, textvariable=var, values=options, state="readonly")
-        dropdown.grid(row=row, column=1, pady=5)
+        dropdown.grid(row=row, column=6, pady=5)
         self.form_data[label] = var
 
     def create_checkbox(self, label, row):
         var = tk.BooleanVar()
         cb = tk.Checkbutton(self.root, text=label, variable=var)
-        cb.grid(row=row, column=1, sticky='w', padx=10, pady=5)
+        cb.grid(row=row, column=6, sticky='w', padx=10, pady=5)
         self.form_data[label] = var
 
     def submit_data(self):
