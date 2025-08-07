@@ -1,5 +1,6 @@
 CREATE DATABASE IF NOT EXISTS credit_scoring_db;
 USE credit_scoring_db;
+
 CREATE TABLE user_financial_profile (
     id INT AUTO_INCREMENT PRIMARY KEY,
     cash_inflow DECIMAL(12,2),
@@ -15,9 +16,5 @@ CREATE TABLE user_financial_profile (
     bnpl_repayment_ratio DECIMAL(3,2) NULL,
     education_level ENUM('12th','Diploma','Grad','PostGrad'),
     grade_or_cgpa DECIMAL(4,2) NULL,
-    score DECIMAL(5,2) NULL,
-    decision ENUM('Approved','Rejected') NULL,
-    explanation TEXT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-SELECT * FROM user_financial_profile;

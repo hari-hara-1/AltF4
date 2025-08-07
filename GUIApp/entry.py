@@ -1,7 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
+import mysql.connector
+from tkinter import messagebox
+
 
 class CreditScoringApp(tk.Tk):
+    DB_HOST = 'localhost'
+    DB_USER = 'root'
+    DB_PASSWORD = 'Root$2000'
+    DB_NAME = 'credit_scoring_db'
     def __init__(self):
         super().__init__()
         self.root = self
@@ -57,10 +64,51 @@ class CreditScoringApp(tk.Tk):
             elif isinstance(widget, tk.StringVar):
                 collected_data[key] = widget.get()
             elif isinstance(widget, tk.BooleanVar):
-                collected_data[key] = widget.get()
-        print("\nCollected Form Data:")
-        for k, v in collected_data.items():
-            print(f"{k}: {v}")
-        # Here you can insert to MySQL or use the data for scoring
+                collected_data[key] = int(widget.get())  # Store as 0 or 1
 
+        # Connect to MySQL and insert data
+        try:
+            conn = mysql.connector.connect(
+                host=self.DB_HOST,
+                user=self.DB_USER,
+                password=self.DB_PASSWORD,
+                database=self.DB_NAME
+            )
+            cursor = conn.cursor()
 
+            query = """
+                INSERT INTO user_financial_profile (
+                    cash_inflow, avg_bank_balance, location_type, income_type,
+                    age_to_employment_ratio, housing_type, rent_amount, num_occupants,
+                    bill_payment_consistency, bnpl_used, bnpl_repayment_ratio,
+                    education_level, grade_or_cgpa
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+
+            values = (
+                collected_data["cash_inflow"],
+                collected_data["avg_bank_balance"],
+                collected_data["location_type"],
+                collected_data["income_type"],
+                collected_data["age_to_employment_ratio"],
+                collected_data["housing_type"],
+                collected_data["rent_amount"],
+                collected_data["num_occupants"],
+                collected_data["bill_payment_consistency"],
+                collected_data["bnpl_used"],
+                collected_data["bnpl_repayment_ratio"],
+                collected_data["education_level"],
+                collected_data["grade_or_cgpa"]
+            )
+
+            cursor.execute(query, values)
+            conn.commit()
+            messagebox.showinfo("Success", "Data inserted into database successfully!")
+
+        except mysql.connector.Error as err:
+            messagebox.showerror("Database Error", f"Error: {err}")
+        finally:
+            if 'cursor' in locals():
+                cursor.close()
+            if 'conn' in locals():
+                conn.close()
