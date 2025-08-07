@@ -1,4 +1,4 @@
-def evaluate_credit_score(user_input: dict, model, feature_names, min_score=300, max_score=850):
+def evaluate_credit_score(user_input: dict, model, min_score=300, max_score=850):
     import pandas as pd
     import numpy as np
     import matplotlib.pyplot as plt
@@ -14,7 +14,17 @@ def evaluate_credit_score(user_input: dict, model, feature_names, min_score=300,
     transformed_input = model.named_steps["preprocessor"].transform(input_df)
     weights = model.named_steps["classifier"].coef_[0]
     contributions = transformed_input[0] * weights
-    feature_contribs = pd.Series(contributions, index=feature_names).sort_values()
+
+    # Get feature names directly from the preprocessor
+    preprocessor = model.named_steps["preprocessor"]
+    num_features = preprocessor.transformers_[0][2]  # from ('num', scaler, [features])
+    cat_features = preprocessor.transformers_[1][2]  # from ('cat', ohe, [features])
+    ohe = preprocessor.named_transformers_["cat"]
+    cat_ohe_features = ohe.get_feature_names_out(cat_features)
+    all_feature_names = list(num_features) + list(cat_ohe_features)
+
+    # Build contribution series
+    feature_contribs = pd.Series(contributions, index=all_feature_names).sort_values()
 
     # Advice dictionary
     feature_advice = {
