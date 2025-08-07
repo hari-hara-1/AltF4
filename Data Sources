@@ -5,3 +5,34 @@ Rent Payment History
 Education and skills
 BNPL(Buy Now Pay Later) & wallet History
 Goverment & Tax Data
+
+Sample model 
+Cash inflow 
+avg bank balance
+location type
+income type 
+based on income type age to employment ratio
+Housing type
+if Rent check rent and occupants
+bill payments ( consistency )
+bnpl used
+education 
+if education check grade
+
+chatgpt final datas
+
+Feature	Type
+
+cash_inflow	Numeric
+avg_bank_balance	Numeric
+location_type	Categorical (Urban/Rural/Semi-Urban)
+income_type	Categorical (Salaried, Gig, Informal)
+age_to_employment_ratio	Numeric (Derived)
+housing_type	Categorical (Owned/Rented/PG)
+rent_amount	Numeric (if applicable)
+num_occupants	Integer (if applicable)
+bill_payment_consistency	Numeric (0–1) or Categorical
+bnpl_used	Boolean
+bnpl_repayment_ratio	Numeric (optional but valuable)
+education_level	Categorical (12th, Diploma, Grad, etc.)
+grade_or_cgpa	Numeric (optional, if education available)
