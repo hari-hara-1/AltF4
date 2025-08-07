@@ -6,9 +6,7 @@ from entry import CreditScoringApp
 class BaseWindow(tb.Window):
     def __init__(self, title="App", size="400x300", theme="flatly"):
         super().__init__(title=title, themename=theme)
-        self.geometry(size)
         self.resizable(False, False)
-
 
 class LoginPage(BaseWindow):
     def __init__(self):
@@ -56,11 +54,11 @@ class LoginPage(BaseWindow):
         pw = self.password_entry.get()
         if user == "admin" and pw == "password":
             messagebox.showinfo("Success", f"Welcome, {user}!")
+            self.withdraw()  # Hide the login window
             self.cApp = CreditScoringApp()
-            self.cApp.mainloop()
+            # Do NOT call self.cApp.mainloop() here!
         else:
             messagebox.showerror("Error", "Invalid username or password.")
-
 
 if __name__ == "__main__":
     app = LoginPage()

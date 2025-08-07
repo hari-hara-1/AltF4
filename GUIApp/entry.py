@@ -3,17 +3,17 @@ from tkinter import ttk
 import mysql.connector
 from tkinter import messagebox
 
-
-class CreditScoringApp(tk.Tk):
+class CreditScoringApp(tk.Toplevel):
     DB_HOST = 'localhost'
     DB_USER = 'root'
     DB_PASSWORD = 'Root$2000'
     DB_NAME = 'credit_scoring_db'
-    def __init__(self):
-        super().__init__()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.root = self
-        self.root.title("Alternative Credit Scoring - Data Entry")
-        self.root.geometry("1000x1000")
+        self.title("Alternative Credit Scoring - Data Entry")
+        self.geometry("1000x1000")
         self.form_data = {}
         self.create_widgets()
 
@@ -31,10 +31,10 @@ class CreditScoringApp(tk.Tk):
         self.create_checkbox("bnpl_used", 9)
         self.create_label_entry("bnpl_repayment_ratio", 10)
         self.create_dropdown("education_level", ["None", "12th", "Diploma", "Graduate", "Postgraduate", "PhD"], 11)
-        self.create_label_entry("grade_or_cgpa", 12)
+        self.create_label_entry("grade_percentage", 12)
 
         # Submit button
-        submit_btn = tk.Button(self.root, text="Submit", command=self.submit_data , fg= "black")
+        submit_btn = tk.Button(self.root, text="Submit", command=self.submit_data, fg="black")
         submit_btn.grid(row=13, column=5, pady=20)
 
     def create_label_entry(self, label, row):
@@ -45,10 +45,12 @@ class CreditScoringApp(tk.Tk):
 
     def create_dropdown(self, label, options, row):
         tk.Label(self.root, text=label).grid(row=row, column=5, sticky='w', padx=10, pady=5)
-        var = tk.StringVar()
+        var = tk.StringVar(value=options[0])
         dropdown = ttk.Combobox(self.root, textvariable=var, values=options, state="readonly")
         dropdown.grid(row=row, column=6, pady=5)
+        # Store both var and dropdown to prevent garbage collection
         self.form_data[label] = var
+        self.form_data[label + "_widget"] = dropdown
 
     def create_checkbox(self, label, row):
         var = tk.BooleanVar()
@@ -60,13 +62,21 @@ class CreditScoringApp(tk.Tk):
         collected_data = {}
         for key, widget in self.form_data.items():
             if isinstance(widget, tk.Entry):
-                collected_data[key] = widget.get()
+                collected_data[key] = widget.get().strip()
             elif isinstance(widget, tk.StringVar):
-                collected_data[key] = widget.get()
+                collected_data[key] = widget.get().strip()
             elif isinstance(widget, tk.BooleanVar):
-                collected_data[key] = int(widget.get())  # Store as 0 or 1
+                collected_data[key] = int(widget.get())
 
-        # Connect to MySQL and insert data
+        education = collected_data.get("education_level", "").strip()
+        if not education or len(education) > 30:
+            messagebox.showerror("Input Error", f"Invalid education level: '{education}'")
+            return
+        collected_data["education_level"] = education  # Overwrite with trimmed version
+
+        # Debug print for safety
+        print(f"Education level: '{education}' (length: {len(education)})")
+
         try:
             conn = mysql.connector.connect(
                 host=self.DB_HOST,
@@ -81,7 +91,7 @@ class CreditScoringApp(tk.Tk):
                     cash_inflow, avg_bank_balance, location_type, income_type,
                     age_to_employment_ratio, housing_type, rent_amount, num_occupants,
                     bill_payment_consistency, bnpl_used, bnpl_repayment_ratio,
-                    education_level, grade_or_cgpa
+                    education_level, grade_percentage
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
 
@@ -98,7 +108,7 @@ class CreditScoringApp(tk.Tk):
                 collected_data["bnpl_used"],
                 collected_data["bnpl_repayment_ratio"],
                 collected_data["education_level"],
-                collected_data["grade_or_cgpa"]
+                collected_data["grade_percentage"]
             )
 
             cursor.execute(query, values)
