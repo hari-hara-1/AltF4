@@ -6,7 +6,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 import joblib
-from evaluatemodel import evaluate_credit_score  # Your evaluation function
+from GUIApp.evaluatemodel import evaluate_credit_score  # Your evaluation function
 
 # Define the feature names directly
 feature_names = [
