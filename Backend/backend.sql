@@ -19,5 +19,4 @@ CREATE TABLE user_financial_profile (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     
 );
-alter table user_financial_profile rename column grade_or_cgpa to grade_percentage;
 select * from user_financial_profile;
