@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 
-class CreditScoringApp:
-    def __init__(self, root):
-        self.root = root
+class CreditScoringApp(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.root = self
         self.root.title("Alternative Credit Scoring - Data Entry")
         self.root.geometry("600x700")
         self.form_data = {}
@@ -62,8 +63,4 @@ class CreditScoringApp:
             print(f"{k}: {v}")
         # Here you can insert to MySQL or use the data for scoring
 
-# Main execution
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = CreditScoringApp(root)
-    root.mainloop()
+

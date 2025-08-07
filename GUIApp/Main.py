@@ -1,6 +1,7 @@
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 from tkinter import messagebox
+from entry import CreditScoringApp
 
 class BaseWindow(tb.Window):
     def __init__(self, title="App", size="400x300", theme="flatly"):
@@ -55,7 +56,8 @@ class LoginPage(BaseWindow):
         pw = self.password_entry.get()
         if user == "admin" and pw == "password":
             messagebox.showinfo("Success", f"Welcome, {user}!")
-
+            self.cApp = CreditScoringApp()
+            self.cApp.mainloop()
         else:
             messagebox.showerror("Error", "Invalid username or password.")
 
