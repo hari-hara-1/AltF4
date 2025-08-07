@@ -2,14 +2,14 @@ import pandas as pd
 import numpy as np
 import random
 
-# Seed for reproducibility
+
 np.random.seed(42)
 random.seed(42)
 
-# Number of rows in the dataset
+
 n_rows = 500
 
-# --- Helper Functions ---
+
 
 def random_cash_inflow(income_type):
     if income_type == 'Salaried':
@@ -79,7 +79,7 @@ def approve_loan(cash_inflow, avg_balance, bill_consistency, bnpl, education):
     score += 1 if education in ['Graduate', 'Postgraduate'] else 0
     return 1 if score >= 3 else 0
 
-# --- Generate Dataset ---
+
 
 data = []
 
@@ -110,6 +110,6 @@ columns = [
 
 df = pd.DataFrame(data, columns=columns)
 
-# Save or show preview
+
 df.to_csv("synthetic_credit_data.csv", index=False)
 print(df.head())
