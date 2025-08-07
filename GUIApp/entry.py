@@ -35,7 +35,7 @@ class CreditScoringApp(tk.Tk):
 
         # Submit button
         submit_btn = tk.Button(self.root, text="Submit", command=self.submit_data , fg= "black")
-        submit_btn.grid(row=13, column=1, pady=20)
+        submit_btn.grid(row=13, column=5, pady=20)
 
     def create_label_entry(self, label, row):
         tk.Label(self.root, text=label).grid(row=row, column=5, sticky='w', padx=10, pady=5)
