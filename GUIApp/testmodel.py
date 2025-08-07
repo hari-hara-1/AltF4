@@ -6,7 +6,8 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 import matplotlib.pyplot as plt
 import joblib
-from GUIApp.evaluatemodel import evaluate_credit_score  # Your evaluation function
+import os
+from evaluatemodel import evaluate_credit_score  # Your evaluation function
 
 # Define the feature names directly
 feature_names = [
@@ -35,16 +36,17 @@ feature_names = [
 ]
 
 # Load model
-model = joblib.load("credit_score_model.pkl")
+model_path = os.path.join(os.path.dirname(__file__), "credit_score_model.pkl")
+model = joblib.load(model_path)
 
 # Define test input
 sample_input = {
     "age": 29,
     "num_occupants": 3,
     "cash_inflow": 45000,
-    "avg_bank_balance": 80000,
+    "avg_bank_balance": 2000,
     "bill_payment_consistency": "Usually",
-    "bnpl_used": True,
+    "bnpl_used": False,
     "rent_amount": 12000,
     "location_type": "Urban",
     "education_level": "Graduate",
